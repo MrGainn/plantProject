@@ -77,7 +77,7 @@ public class UserServiceJPA implements UserService {
                 foundUser.setUsername(User.getUsername());
             }
             if (StringUtils.hasText(User.getEmail())){
-                foundUser.setUsername(User.getEmail());
+                foundUser.setEmail(User.getEmail());
             }
             atomicReference.set(Optional.of(UserMapper
                     .UserToUserDto(UserRepository.save(foundUser))));

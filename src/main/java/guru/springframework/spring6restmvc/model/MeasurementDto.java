@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -14,7 +15,7 @@ public class MeasurementDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer measurementId;
+    private UUID measurementId;
 
     private LocalDateTime date;
 
