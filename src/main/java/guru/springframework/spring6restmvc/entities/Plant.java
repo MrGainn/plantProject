@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.entities;
 
-import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,35 +22,18 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Beer {
+public class Plant {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
-    private UUID id;
-
-    @Version
-    private Integer version;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 50)
-    @Column(length = 50)
-    private String beerName;
-
-    @NotNull
-    private BeerStyle beerStyle;
+    private UUID plantId;
 
     @NotNull
     @NotBlank
     @Size(max = 255)
-    private String upc;
-    private Integer quantityOnHand;
+    private String plantName;
 
-    @NotNull
-    private BigDecimal price;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
 }

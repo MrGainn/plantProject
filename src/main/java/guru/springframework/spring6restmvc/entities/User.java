@@ -18,17 +18,19 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class User {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
-    private String name;
+    private String username;
+    private String email;
 
-    @Version
-    private Integer version;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
+    private String hashedpassword;
+
+    private Boolean admin;
+
+    private LocalDateTime createDate;
 }
