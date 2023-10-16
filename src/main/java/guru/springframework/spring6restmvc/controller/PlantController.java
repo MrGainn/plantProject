@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
+@CrossOrigin
 @RestController
 @RequestMapping("/api/plant")
 public class PlantController {

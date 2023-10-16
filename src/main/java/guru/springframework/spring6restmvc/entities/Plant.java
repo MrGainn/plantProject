@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +45,7 @@ public class Plant {
 
 
     @Builder.Default
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "UserToPlant",
             joinColumns = @JoinColumn(name = "userId"),

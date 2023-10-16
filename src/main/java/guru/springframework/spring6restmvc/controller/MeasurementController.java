@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
+@CrossOrigin
 @RestController
 @RequestMapping("/api/measurement")
 public class MeasurementController {

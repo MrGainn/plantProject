@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.model;
 
+import guru.springframework.spring6restmvc.entities.Plant;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -8,6 +9,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -27,4 +29,10 @@ public class UserDto {
 
     @CreationTimestamp
     private LocalDateTime createDate;
+
+    private Set<Plant> plants;
+
+    public void removePlants(){
+        this.plants = null;
+    }
 }
