@@ -35,7 +35,7 @@ public class UserController {
         UserDto savedUser = userService.saveNewUser(user);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/user/" + savedUser.getId().toString());
+        headers.add("Location", "/api/v1/user/" + savedUser.getUserId().toString());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }

@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.entities.Measurement;
 import guru.springframework.spring6restmvc.mappers.PlantMapper;
 import guru.springframework.spring6restmvc.model.PlantDto;
 import guru.springframework.spring6restmvc.repositories.PlantRepository;
@@ -80,5 +81,10 @@ public class PlantServiceJPA implements PlantService {
             atomicReference.set(Optional.empty());
         });
         return atomicReference.get();
+    }
+
+    @Override
+    public Optional<Measurement> getPlantMeasurement(UUID measurementId) {
+        return Optional.empty();
     }
 }

@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.controller;
 
+import guru.springframework.spring6restmvc.entities.Measurement;
 import guru.springframework.spring6restmvc.services.PlantService;
 import guru.springframework.spring6restmvc.model.PlantDto;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,11 @@ public class PlantController {
     @GetMapping(value = "{plantId}")
     public Optional<PlantDto> getPlantById(@PathVariable("plantId") UUID plantId){
         return plantService.getPlantById(plantId);
+    }
+
+    @GetMapping(value = "/measurement/{measurementId}")
+    public Optional<Measurement> getMeasurementByPlant(@PathVariable("measurementId") UUID measurementId){
+        return plantService.getPlantMeasurement(measurementId);
     }
 
     @PostMapping

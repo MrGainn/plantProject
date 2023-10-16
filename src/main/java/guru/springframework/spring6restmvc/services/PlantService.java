@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.entities.Measurement;
 import guru.springframework.spring6restmvc.model.PlantDto;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface PlantService {
     Boolean deletePlantById(UUID plantId);
 
     Optional<PlantDto> patchPlantById(UUID plantId, PlantDto plant);
+
+    Optional<Measurement> getPlantMeasurement(UUID measurementId);
 }

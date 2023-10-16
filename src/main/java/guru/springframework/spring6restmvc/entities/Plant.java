@@ -11,6 +11,8 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -36,4 +38,15 @@ public class Plant {
     @Size(max = 255)
     private String plantName;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "plant")
+    private Set<Measurement> measurements = new HashSet<>();
+
+
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(name = "UserToPlant",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "plantId"))
+    private Set<User> users = new HashSet<>();
 }
