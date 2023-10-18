@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -25,24 +28,38 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> {
                     authorize
                             .requestMatchers("/login").permitAll()
-                            .requestMatchers("/favicon.ico").permitAll()
-                            .anyRequest().authenticated();
+                            .requestMatchers("/api/**").authenticated();
                 })
-                .formLogin(withDefaults())
-                .oauth2Login(withDefaults())
                 .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> {
-                    // Set a custom authentication entry point to return 401 for unauthorized API calls
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                });// Set custom UserDetailsService
-
+                .defaultAuthenticationEntryPointFor(jsonAuthenticationEntryPoint(), new AntPathRequestMatcher("/api/**"))
+                .and()
+                .formLogin(withDefaults())
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf().disable()
+                .oauth2Login(withDefaults());
 
         return http.build();
     }
+    @Bean
+    public AuthenticationEntryPoint jsonAuthenticationEntryPoint() {
+        return (request, response, authException) -> {
+//            if (request.getRequestURI().startsWith("/api/login")) {
+//                return;
+//            }
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            String jsonErrorResponse = "{ \"message\": \"Unauthorized\" }";
+            response.getWriter().write(jsonErrorResponse);
+        };
+    }
+
 }
