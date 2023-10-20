@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,16 +27,21 @@ public class PlantController {
     private final CheckAuth checkAuth;
 
     @GetMapping
-    public Optional<PlantDto> listPlantsOfLogginUser() {
+    public List<PlantDto> listPlantsOfLogginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            UUID uuid = checkAuth.authentication(authentication);
-            if (uuid.equals(UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9"))) {
-                return Optional.empty();
+            Optional<User> user = checkAuth.authenticationForUser(authentication);
+            if (user.isEmpty()){
+                return new ArrayList<>();
             }
-            return plantService.getPlantById(uuid);
+            User user1 = user.get();
+
+            if (user1.getUserId().equals(UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9"))) {
+                return new ArrayList<>();
+            }
+            return plantService.getPlantsByUserId(user1);
         }
-        return Optional.empty();
+        return new ArrayList<>();
     }
 
     @GetMapping("/listAllPlants")

@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.model;
 
 import guru.springframework.spring6restmvc.entities.Measurement;
+import guru.springframework.spring6restmvc.entities.User;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,4 +23,5 @@ public class PlantDto {
 
     private Set<Measurement> measurements;
 
+    private Set<User> users;
 }

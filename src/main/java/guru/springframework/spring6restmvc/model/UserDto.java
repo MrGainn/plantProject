@@ -32,7 +32,10 @@ public class UserDto {
 
     private Set<Plant> plants;
 
+
     public void removePlants(){
         this.plants = null;
     }
+
+
 }

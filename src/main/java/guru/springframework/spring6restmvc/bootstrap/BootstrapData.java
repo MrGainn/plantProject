@@ -57,8 +57,6 @@ public class BootstrapData implements CommandLineRunner {
             plantRepository.save(plant2);
             plantRepository.save(plant3);
         }
-
-
     }
 
     private void loadUserData() {
@@ -68,7 +66,7 @@ public class BootstrapData implements CommandLineRunner {
                     .email("tico@gmail.com")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("This is my password")
+                    .hashedpassword("8844a011c45e0993424a5f26a7e10b51")
                     .plants(new HashSet<>(Arrays.asList(plant1, plant3)))
                     .build();
             User user2 = User.builder()
@@ -76,24 +74,24 @@ public class BootstrapData implements CommandLineRunner {
                     .username("Kazi")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("dog")
+                    .hashedpassword("ad0de7adf7e320ef614715ee8a13a6e9")
                     .build();
             User user3 = User.builder()
                     .email("Nikita@gmail.com")
                     .username("nikita")
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("cat")
+                    .hashedpassword("8844a011c45e0993424a5f26a7e10b51")
                     .plants(new HashSet<>(Arrays.asList(plant2)))
                     .build();
 
             User user4 = User.builder()
                     .email("Pieter@gmail.com")
-                    .username("Pieter lamlich")
+                    .username("Pieter")
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
                     .plants(new HashSet<>(Arrays.asList(plant3, plant2)))
-                    .hashedpassword("I smoke")
+                    .hashedpassword("94189e6c2689558fefbb8474e06d1982")
                     .build();
 
             userRepository.save(user1);

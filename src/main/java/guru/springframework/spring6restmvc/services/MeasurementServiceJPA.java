@@ -1,8 +1,11 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.entities.Measurement;
+import guru.springframework.spring6restmvc.entities.Plant;
 import guru.springframework.spring6restmvc.mappers.MeasurementMapper;
 import guru.springframework.spring6restmvc.model.MeasurementDto;
 import guru.springframework.spring6restmvc.repositories.MeasurementRepository;
+import guru.springframework.spring6restmvc.repositories.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,18 @@ public class MeasurementServiceJPA implements MeasurementService {
 
     private final MeasurementRepository measurementRepository;
 
+    private final PlantRepository plantRepository;
+
     private final MeasurementMapper measurementMapper;
+
+    @Override
+    public List<MeasurementDto> listAllMeasurementsByPlant(Plant plant) {
+        return measurementRepository.findAllByPlant(plant)
+                .stream()
+                .map(measurementMapper::measurementToMeasurementDto)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<MeasurementDto> listAllMeasurements() {
         return measurementRepository.findAll().stream()
@@ -32,9 +46,18 @@ public class MeasurementServiceJPA implements MeasurementService {
     }
 
     @Override
-    public MeasurementDto saveNewMeasurement(MeasurementDto measurement) {
-        return measurementMapper.measurementToMeasurementDto(measurementRepository
-                .save(measurementMapper.measurementDtoToMeasurement(measurement)));
+    public MeasurementDto saveNewMeasurement(Plant plant, MeasurementDto measurement) {
+
+        measurement.setPlant(plant);
+        Measurement savedMeasurement = measurementRepository.save(measurementMapper.measurementDtoToMeasurement(measurement));
+
+        Set<Measurement> measurements = plant.getMeasurements();
+        measurements.add(savedMeasurement);
+        plant.setMeasurements(measurements);
+
+        plantRepository.save(plant);
+
+        return measurementMapper.measurementToMeasurementDto(savedMeasurement);
     }
 
     @Override

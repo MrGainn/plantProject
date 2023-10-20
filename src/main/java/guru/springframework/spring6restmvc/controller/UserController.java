@@ -35,7 +35,6 @@ public class UserController {
             else {
                 return ResponseEntity.ok(uuid);
             }
-
         }
         return (ResponseEntity<UUID>) ResponseEntity.status(HttpStatus.UNAUTHORIZED);
     }

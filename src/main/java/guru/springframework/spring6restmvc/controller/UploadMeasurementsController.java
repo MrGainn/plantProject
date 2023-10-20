@@ -19,35 +19,44 @@ import java.util.UUID;
 @AllArgsConstructor
 @CrossOrigin
 @RestController
-@RequestMapping("/api/measurement")
-public class MeasurementController {
+@RequestMapping("/measurement")
+public class UploadMeasurementsController {
 
     private final MeasurementService measurementService;
+
     private final PlantService plantService;
 
     private final PlantMapper plantMapper;
 
-    @GetMapping
-    public List<MeasurementDto> listMeasurements(){
+    @GetMapping("/plantId")
+    public UUID listMeasurements(){
 
-        return measurementService.listAllMeasurements();
+        return UUID.randomUUID();
     }
 
-    @GetMapping(value = "{plantId}")
-    public List<MeasurementDto> getMeasurementByPlant(@PathVariable("plantId") UUID plantId){
+//    @GetMapping
+//    public UUID getPlantId(){
+//
+//        return measurementService.getFirstMeasurementId();
+//    }
+
+
+    @PostMapping(value = "{plantId}")
+    public ResponseEntity handlePost(@PathVariable UUID plantId, @RequestBody MeasurementDto measurement){
+
         Optional<PlantDto> plantOptional = plantService.getPlantById(plantId);
         if (plantOptional.isEmpty()){
-            return null;
+            return (ResponseEntity) ResponseEntity.status(HttpStatus.CONFLICT);
         }
         Plant plant = plantMapper.plantDtoToPlant(plantOptional.get());
 
-        return measurementService.listAllMeasurementsByPlant(plant);
-    }
-    @GetMapping(value = "getById/{measurementId}")
-    public Optional<MeasurementDto> getMeasurementById(@PathVariable("measurementId") UUID measurementId){
-        return measurementService.getMeasurementById(measurementId);
-    }
+        MeasurementDto Measurement = measurementService.saveNewMeasurement(plant, measurement);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/plant/");
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
 
     @PatchMapping("{measurementId}")
     public ResponseEntity patchMeasurementById(@PathVariable("measurementId") UUID measurementId, @RequestBody MeasurementDto plant){

@@ -27,6 +27,6 @@ public class MeasurementDto {
 
     private Float uv;
 
-
+    private Plant plant;
 
 }

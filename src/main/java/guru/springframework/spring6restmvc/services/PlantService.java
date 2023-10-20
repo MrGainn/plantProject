@@ -21,5 +21,7 @@ public interface PlantService {
 
     Optional<PlantDto> patchPlantById(UUID plantId, PlantDto plant);
 
+    List<PlantDto> getPlantsByUserId(User user);
+
     Optional<Measurement> getPlantMeasurement(UUID measurementId);
 }
