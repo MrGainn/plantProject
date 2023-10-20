@@ -1,7 +1,5 @@
 package guru.springframework.spring6restmvc.services;
 
-import guru.springframework.spring6restmvc.entities.Plant;
-import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.mappers.UserMapper;
 import guru.springframework.spring6restmvc.model.UserDto;
 import guru.springframework.spring6restmvc.repositories.UserRepository;
@@ -10,7 +8,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,9 +39,6 @@ public class UserServiceJPA implements UserService {
                     return userDto;
                 })
                 .collect(Collectors.toList());
-
-
-
     }
 
     @Override

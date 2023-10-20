@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.services;
 
 import guru.springframework.spring6restmvc.entities.Measurement;
+import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.model.PlantDto;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface PlantService {
 
     Optional<PlantDto> getPlantById(UUID plantId);
 
-    PlantDto saveNewPlant(PlantDto plant);
+    PlantDto saveNewPlant(User user, PlantDto plant);
 
     Optional<PlantDto> updatePlantById(UUID plantId, PlantDto plant);
 

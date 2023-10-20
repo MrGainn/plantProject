@@ -1,6 +1,8 @@
 package guru.springframework.spring6restmvc.services;
 
 import guru.springframework.spring6restmvc.entities.Measurement;
+import guru.springframework.spring6restmvc.entities.Plant;
+import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.mappers.PlantMapper;
 import guru.springframework.spring6restmvc.model.PlantDto;
 import guru.springframework.spring6restmvc.repositories.PlantRepository;
@@ -9,9 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 public class PlantServiceJPA implements PlantService {
     private final PlantRepository PlantRepository;
     private final PlantMapper plantMapper;
+
+    private final UserService userService;
 
     @Override
     public List<PlantDto> listAllPlants() {
@@ -40,8 +42,12 @@ public class PlantServiceJPA implements PlantService {
     }
 
     @Override
-    public PlantDto saveNewPlant(PlantDto plant) {
-        return plantMapper.plantToPlantDto(PlantRepository.save(plantMapper.plantDtoToPlant(plant)));
+    public PlantDto saveNewPlant(User user, PlantDto plant) {
+
+        Plant savedPlant = PlantRepository.save(plantMapper.plantDtoToPlant(plant));
+        savedPlant.setUsers(new HashSet<>(Collections.singletonList(user)));
+
+        return plantMapper.plantToPlantDto(savedPlant);
     }
 
     @Override

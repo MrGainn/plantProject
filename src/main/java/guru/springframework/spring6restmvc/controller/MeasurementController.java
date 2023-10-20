@@ -1,13 +1,11 @@
 package guru.springframework.spring6restmvc.controller;
 
-import guru.springframework.spring6restmvc.services.MeasurementService;
 import guru.springframework.spring6restmvc.model.MeasurementDto;
+import guru.springframework.spring6restmvc.services.MeasurementService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,13 +21,13 @@ public class MeasurementController {
     private final MeasurementService measurementService;
 
     @GetMapping
-    public List<MeasurementDto> listPlants(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public List<MeasurementDto> listMeasurements(){
+
         return measurementService.listAllMeasurements();
     }
 
     @GetMapping(value = "{measurementId}")
-    public Optional<MeasurementDto> getPlantById(@PathVariable("measurementId") UUID measurementId){
+    public Optional<MeasurementDto> getMeasurementById(@PathVariable("measurementId") UUID measurementId){
         return measurementService.getMeasurementById(measurementId);
     }
 
@@ -45,7 +43,7 @@ public class MeasurementController {
     }
 
     @PatchMapping("{measurementId}")
-    public ResponseEntity updateBeerPatchById(@PathVariable("measurementId") UUID measurementId, @RequestBody MeasurementDto plant){
+    public ResponseEntity patchMeasurementById(@PathVariable("measurementId") UUID measurementId, @RequestBody MeasurementDto plant){
 
         measurementService.patchMeasurementById(measurementId, plant);
 

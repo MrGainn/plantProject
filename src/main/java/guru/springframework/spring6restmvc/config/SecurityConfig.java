@@ -12,9 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -41,13 +41,15 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .defaultAuthenticationEntryPointFor(jsonAuthenticationEntryPoint(), new AntPathRequestMatcher("/api/**"))
                 .and()
-                .formLogin(withDefaults())
+                .formLogin().successHandler(customAuthenticationSuccessHandler())
+                .failureHandler(customAuthenticationFailureHandler()).and()
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf().disable()
-                .oauth2Login(withDefaults());
+                .oauth2Login().successHandler(customAuthenticationSuccessHandler());
 
         return http.build();
     }
+
     @Bean
     public AuthenticationEntryPoint jsonAuthenticationEntryPoint() {
         return (request, response, authException) -> {
@@ -60,6 +62,17 @@ public class SecurityConfig {
             String jsonErrorResponse = "{ \"message\": \"Unauthorized\" }";
             response.getWriter().write(jsonErrorResponse);
         };
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 
 }

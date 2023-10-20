@@ -1,12 +1,15 @@
 package guru.springframework.spring6restmvc.controller;
 
-import guru.springframework.spring6restmvc.entities.Measurement;
-import guru.springframework.spring6restmvc.services.PlantService;
+import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.model.PlantDto;
+import guru.springframework.spring6restmvc.services.CheckAuth;
+import guru.springframework.spring6restmvc.services.PlantService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +23,23 @@ import java.util.UUID;
 public class PlantController {
 
     private final PlantService plantService;
+    private final CheckAuth checkAuth;
 
     @GetMapping
-    public List<PlantDto> listPlants(){
+    public Optional<PlantDto> listPlantsOfLogginUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            UUID uuid = checkAuth.authentication(authentication);
+            if (uuid.equals(UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9"))) {
+                return Optional.empty();
+            }
+            return plantService.getPlantById(uuid);
+        }
+        return Optional.empty();
+    }
+
+    @GetMapping("/listAllPlants")
+    public List<PlantDto> listAllPlants(){
         return plantService.listAllPlants();
     }
 
@@ -31,20 +48,28 @@ public class PlantController {
         return plantService.getPlantById(plantId);
     }
 
-    @GetMapping(value = "/measurement/{measurementId}")
-    public Optional<Measurement> getMeasurementByPlant(@PathVariable("measurementId") UUID measurementId){
-        return plantService.getPlantMeasurement(measurementId);
-    }
-
     @PostMapping
     public ResponseEntity handlePost(@RequestBody PlantDto plant){
 
-        PlantDto savedPlant = plantService.saveNewPlant(plant);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            Optional<User> userOptional = checkAuth.authenticationForUser(authentication);
+            if (userOptional.isEmpty()) {
+                return (ResponseEntity<UUID>) ResponseEntity.status(HttpStatus.CONFLICT);
+            }
+            else {
+                User user = userOptional.get();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/plant/" + savedPlant.getPlantId().toString());
+                PlantDto savedPlant = plantService.saveNewPlant(user, plant);
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Location", "/api/v1/plant/" + savedPlant.getPlantId().toString());
+
+                return new ResponseEntity(headers, HttpStatus.CREATED);
+            }
+
+        }
+        return (ResponseEntity<UUID>) ResponseEntity.status(HttpStatus.CONFLICT);
     }
 
     @PatchMapping("{plantId}")
