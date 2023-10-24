@@ -62,26 +62,27 @@ public class BootstrapData implements CommandLineRunner {
     private void loadUserData() {
         if (userRepository.count() == 0) {
             User user1 = User.builder()
-                    .username("Tico")
+                    .username("tico")
                     .email("tico@gmail.com")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("8844a011c45e0993424a5f26a7e10b51")
-                    .plants(new HashSet<>(Arrays.asList(plant1, plant3)))
+                    .hashedpassword("123")
+                    .plants(new HashSet<>(Arrays.asList(plant1, plant2, plant3)))
                     .build();
             User user2 = User.builder()
                     .email("kazi@gmail.com")
                     .username("Kazi")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("ad0de7adf7e320ef614715ee8a13a6e9")
+                    .hashedpassword("123")
+                    .plants(new HashSet<>(Arrays.asList(plant1)))
                     .build();
             User user3 = User.builder()
                     .email("Nikita@gmail.com")
                     .username("nikita")
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("8844a011c45e0993424a5f26a7e10b51")
+                    .hashedpassword("123")
                     .plants(new HashSet<>(Arrays.asList(plant2)))
                     .build();
 
@@ -91,7 +92,7 @@ public class BootstrapData implements CommandLineRunner {
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
                     .plants(new HashSet<>(Arrays.asList(plant3, plant2)))
-                    .hashedpassword("94189e6c2689558fefbb8474e06d1982")
+                    .hashedpassword("I smoke")
                     .build();
 
             userRepository.save(user1);
@@ -106,44 +107,91 @@ public class BootstrapData implements CommandLineRunner {
             Measurement measurement1 = Measurement.builder()
                     .measurementId(UUID.randomUUID())
                     .uv(5F)
-                    .humidity(5F)
+                    .humidity(6F)
+                    .temp(7f)
+                    .water(10f)
                     .plant(plant1)
                     .build();
             Measurement measurement2 = Measurement.builder()
-                    .uv(8F)
-                    .humidity(75F)
+                    .uv(5F)
+                    .humidity(7F)
+                    .temp(5f)
                     .plant(plant2)
                     .build();
             Measurement measurement3 = Measurement.builder()
                     .measurementId(UUID.randomUUID())
                     .date(LocalDateTime.now())
                     .plant(plant2)
-                    .uv(587876F)
-                    .humidity(521F)
+                    .uv(7F)
+                    .humidity(9F)
+                    .temp(3f)
                     .build();
 
             Measurement measurement4 = Measurement.builder()
                     .measurementId(UUID.randomUUID())
                     .plant(plant2)
-                    .uv(587876F)
-                    .humidity(521F)
-                    .temp(95f)
+                    .uv(2F)
+                    .humidity(8F)
+                    .temp(5f)
                     .build();
 
             Measurement measurement5 = Measurement.builder()
                     .measurementId(UUID.randomUUID())
                     .plant(plant2)
-                    .uv(876F)
-                    .humidity(21F)
-                    .temp(7f)
+                    .uv(6F)
+                    .humidity(5F)
+                    .temp(6f)
                     .build();
 
             Measurement measurement6 = Measurement.builder()
                     .measurementId(UUID.randomUUID())
                     .plant(plant2)
-                    .uv(587F)
-                    .humidity(52F)
-                    .temp(67f)
+                    .uv(7F)
+                    .humidity(6F)
+                    .temp(7f)
+                    .build();
+            Measurement measurement7 = Measurement.builder()
+                    .measurementId(UUID.randomUUID())
+                    .uv(9F)
+                    .humidity(6F)
+                    .temp(7f)
+                    .plant(plant1)
+                    .build();
+            Measurement measurement8 = Measurement.builder()
+                    .measurementId(UUID.randomUUID())
+                    .uv(5F)
+                    .humidity(3F)
+                    .temp(3f)
+                    .plant(plant1)
+                    .build();
+            Measurement measurement9 = Measurement.builder()
+                    .measurementId(UUID.randomUUID())
+                    .uv(7F)
+                    .humidity(6F)
+                    .temp(9f)
+                    .plant(plant1)
+                    .build();
+
+            Measurement measurement10 = Measurement.builder()
+                    .measurementId(UUID.randomUUID())
+                    .uv(4F)
+                    .humidity(7F)
+                    .temp(5f)
+                    .plant(plant3)
+                    .build();
+            Measurement measurement11 = Measurement.builder()
+                    .measurementId(UUID.randomUUID())
+                    .uv(7F)
+                    .humidity(6F)
+                    .temp(9f)
+                    .plant(plant3)
+                    .build();
+            Measurement measurement12 = Measurement.builder()
+                    .measurementId(UUID.randomUUID())
+                    .uv(6F)
+                    .humidity(4F)
+                    .temp(3f)
+                    .plant(plant3)
                     .build();
 
 
@@ -154,6 +202,13 @@ public class BootstrapData implements CommandLineRunner {
             measurementRepository.save(measurement4);
             measurementRepository.save(measurement5);
             measurementRepository.save(measurement6);
+            measurementRepository.save(measurement7);
+            measurementRepository.save(measurement8);
+            measurementRepository.save(measurement9);
+            measurementRepository.save(measurement10);
+            measurementRepository.save(measurement11);
+            measurementRepository.save(measurement12);
+
 
         }
     }

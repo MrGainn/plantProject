@@ -7,7 +7,6 @@ import guru.springframework.spring6restmvc.model.PlantDto;
 import guru.springframework.spring6restmvc.services.MeasurementService;
 import guru.springframework.spring6restmvc.services.PlantService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +25,7 @@ public class MeasurementController {
     private final PlantService plantService;
 
     private final PlantMapper plantMapper;
+
 
     @GetMapping
     public List<MeasurementDto> listMeasurements(){

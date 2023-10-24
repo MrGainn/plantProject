@@ -112,4 +112,13 @@ public class PlantServiceJPA implements PlantService {
     public Optional<Measurement> getPlantMeasurement(UUID measurementId) {
         return Optional.empty();
     }
+
+    @Override
+    public UUID getFirstInRepository() {
+        Optional<Plant> plant = plantRepository.findAll().stream().findFirst();
+        if (plant.isEmpty()){
+            return UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9");
+        }
+        return plant.get().getPlantId();
+    }
 }

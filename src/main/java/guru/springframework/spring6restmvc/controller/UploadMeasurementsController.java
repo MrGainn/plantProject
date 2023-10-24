@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,50 +27,33 @@ public class UploadMeasurementsController {
 
     private final PlantMapper plantMapper;
 
-    @GetMapping("/plantId")
-    public UUID listMeasurements(){
+    @GetMapping("/getPlant")
+    public ResponseEntity<UUID> getPiId(){
 
-        return UUID.randomUUID();
+        UUID plantUUID = plantService.getFirstInRepository();
+        if (plantUUID.equals(UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9"))){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(plantUUID);
     }
-
-//    @GetMapping
-//    public UUID getPlantId(){
-//
-//        return measurementService.getFirstMeasurementId();
-//    }
-
 
     @PostMapping(value = "{plantId}")
     public ResponseEntity handlePost(@PathVariable UUID plantId, @RequestBody MeasurementDto measurement){
 
         Optional<PlantDto> plantOptional = plantService.getPlantById(plantId);
         if (plantOptional.isEmpty()){
-            return (ResponseEntity) ResponseEntity.status(HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         Plant plant = plantMapper.plantDtoToPlant(plantOptional.get());
 
         MeasurementDto Measurement = measurementService.saveNewMeasurement(plant, measurement);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/plant/");
+        headers.add("Location", "/api/v1/measurement/" + measurement.getMeasurementId());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
-    @PatchMapping("{measurementId}")
-    public ResponseEntity patchMeasurementById(@PathVariable("measurementId") UUID measurementId, @RequestBody MeasurementDto plant){
-
-        measurementService.patchMeasurementById(measurementId, plant);
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("{measurementId}")
-    public ResponseEntity deleteById(@PathVariable("measurementId") UUID measurementId){
-
-        measurementService.deleteMeasurementById(measurementId);
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
 
 }

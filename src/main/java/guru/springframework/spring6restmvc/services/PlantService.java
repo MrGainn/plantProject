@@ -24,4 +24,6 @@ public interface PlantService {
     List<PlantDto> getPlantsByUserId(User user);
 
     Optional<Measurement> getPlantMeasurement(UUID measurementId);
+
+    UUID getFirstInRepository();
 }
