@@ -34,14 +34,23 @@ public class PlantServiceJPA implements PlantService {
     public List<PlantDto> listAllPlants() {
         return plantRepository.findAll()
                 .stream()
-                .map(plantMapper::plantToPlantDto)
+                .map(plant -> {
+                    PlantDto plantDto = plantMapper.plantToPlantDto(plant);
+                    plantDto.setUsers(new HashSet<>());
+                    plantDto.setMeasurements(new HashSet<>());// Set an empty HashSet<User> on each PlantDto
+                    return plantDto;
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<PlantDto> getPlantById(UUID id) {
-        return Optional.ofNullable(plantMapper.plantToPlantDto(plantRepository.findById(id)
-                .orElse(null)));
+        PlantDto plantDTO = plantMapper.plantToPlantDto(plantRepository.findById(id)
+                .orElse(null));
+        plantDTO.setUsers(new HashSet<>());
+        plantDTO.setMeasurements(new HashSet<>());
+
+        return Optional.of(plantDTO);
     }
 
     @Override
@@ -103,9 +112,13 @@ public class PlantServiceJPA implements PlantService {
     public List<PlantDto> getPlantsByUserId(User user) {
         return plantRepository.findAllByUsers(user)
                 .stream()
-                .map(plantMapper::plantToPlantDto)
+                .map(plant -> {
+                    PlantDto plantDto = plantMapper.plantToPlantDto(plant);
+                    plantDto.setUsers(new HashSet<>());
+                    plantDto.setMeasurements(new HashSet<>());// Set an empty HashSet<User> on each PlantDto
+                    return plantDto;
+                })
                 .collect(Collectors.toList());
-
     }
 
     @Override

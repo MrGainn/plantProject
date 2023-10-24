@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -29,20 +32,35 @@ public class MeasurementServiceJPA implements MeasurementService {
     public List<MeasurementDto> listAllMeasurementsByPlant(Plant plant) {
         return measurementRepository.findAllByPlant(plant)
                 .stream()
-                .map(measurementMapper::measurementToMeasurementDto)
+                .map(measurement -> {
+                    MeasurementDto measurementDto = measurementMapper.measurementToMeasurementDto(measurement);
+                    measurementDto.setPlant(null);
+                    return measurementDto;
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<MeasurementDto> listAllMeasurements() {
         return measurementRepository.findAll().stream()
-                .map(measurementMapper::measurementToMeasurementDto).collect(Collectors.toList());
+                .map(measurement -> {
+                    MeasurementDto measurementDto = measurementMapper.measurementToMeasurementDto(measurement);
+                    measurementDto.setPlant(null);
+                    return measurementDto;
+                }).collect(Collectors.toList());
+
+
+
     }
 
     @Override
     public Optional<MeasurementDto> getMeasurementById(UUID measurementId) {
-        return Optional.ofNullable(measurementMapper
-                .measurementToMeasurementDto(measurementRepository.findById(measurementId).orElse(null)));
+        MeasurementDto measurementDto = measurementMapper
+                .measurementToMeasurementDto(measurementRepository.findById(measurementId).orElse(null));
+
+        measurementDto.setPlant(null);
+
+        return Optional.of(measurementDto);
     }
 
     @Override
