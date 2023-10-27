@@ -7,6 +7,7 @@ import guru.springframework.spring6restmvc.model.PlantDto;
 import guru.springframework.spring6restmvc.services.MeasurementService;
 import guru.springframework.spring6restmvc.services.PlantService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +35,14 @@ public class MeasurementController {
     }
 
     @GetMapping(value = "{plantId}")
-    public List<MeasurementDto> getMeasurementByPlant(@PathVariable("plantId") UUID plantId){
+    public Page<MeasurementDto> getMeasurementByPlant(@PathVariable("plantId") UUID plantId, @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize){
         Optional<PlantDto> plantOptional = plantService.getPlantById(plantId);
         if (plantOptional.isEmpty()){
             return null;
         }
         Plant plant = plantMapper.plantDtoToPlant(plantOptional.get());
 
-        return measurementService.listAllMeasurementsByPlant(plant);
+        return measurementService.listAllMeasurementsByPlant(plant, pageNumber, pageSize);
     }
     @GetMapping(value = "getById/{measurementId}")
     public Optional<MeasurementDto> getMeasurementById(@PathVariable("measurementId") UUID measurementId){

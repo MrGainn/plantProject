@@ -8,6 +8,9 @@ import guru.springframework.spring6restmvc.repositories.MeasurementRepository;
 import guru.springframework.spring6restmvc.repositories.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,20 +27,49 @@ public class MeasurementServiceJPA implements MeasurementService {
 
     private final MeasurementRepository measurementRepository;
 
+    private final static int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 20;
+
     private final PlantRepository plantRepository;
 
     private final MeasurementMapper measurementMapper;
 
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize){
+        int queryPageNumber;
+        int queryPageSize;
+
+        if(pageNumber != null && pageNumber > 0){
+            queryPageNumber = pageNumber - 1;
+        }
+        else {
+            queryPageNumber = DEFAULT_PAGE;
+        }
+        if(pageSize != null && pageSize > 0){
+            queryPageSize = pageSize - 1;
+        }
+        else {
+            queryPageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        Sort sort = Sort.by(Sort.Order.desc("date"));
+
+        return PageRequest.of(queryPageNumber, queryPageSize, sort);
+
+    }
+
+
     @Override
-    public List<MeasurementDto> listAllMeasurementsByPlant(Plant plant) {
-        return measurementRepository.findAllByPlant(plant)
-                .stream()
-                .map(measurement -> {
-                    MeasurementDto measurementDto = measurementMapper.measurementToMeasurementDto(measurement);
-                    measurementDto.setPlant(null);
-                    return measurementDto;
-                })
-                .collect(Collectors.toList());
+    public Page<MeasurementDto> listAllMeasurementsByPlant(Plant plant, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+
+        Page<Measurement> measurementPage = measurementRepository.findAllByPlant(plant, pageRequest);
+
+        return measurementPage.map(measurement -> {
+            MeasurementDto measurementDto = measurementMapper.measurementToMeasurementDto(measurement);
+            measurementDto.setPlant(null);
+            return measurementDto;
+        });
+
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,11 +28,31 @@ public class CheckAuth {
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
             return authenticationForOauth2(oauth2User);
         }
+        else if (authentication.getPrincipal() instanceof Jwt) {
+            // Assuming the principal is a Jwt object
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            return authenticationForJWTToken(jwt);
+            // Extract user information from the JWT claims
+        }
 
         //Default error UUID
         return UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9");
     }
 
+    private UUID authenticationForJWTToken(Jwt jwtUser){
+        String username = jwtUser.getClaimAsString("sub");
+
+        User user =  userRepository.findByUsername(username);
+
+        if (user != null) {
+            return user.getUserId();
+        }
+
+        else {
+            return UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9");
+        }
+
+    }
     private UUID authenticationForOauth2(OAuth2User oauth2User){
         String username = oauth2User.getAttribute("sub");
         String email = oauth2User.getAttribute("email");
@@ -74,9 +95,29 @@ public class CheckAuth {
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
             return authenticationForOauth2ReturnUser(oauth2User);
         }
-
+        else if (authentication.getPrincipal() instanceof Jwt) {
+            // Assuming the principal is a Jwt object
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            return authenticationForJWTTokenReturnUser(jwt);
+            // Extract user information from the JWT claims
+        }
         //Default error UUID
         return null;
+    }
+
+    private Optional<User> authenticationForJWTTokenReturnUser(Jwt jwtUser){
+        String username = jwtUser.getClaimAsString("sub");
+
+        User user =  userRepository.findByUsername(username);
+
+        if (user != null) {
+            return Optional.of(user);
+        }
+
+        else {
+            return Optional.empty();
+        }
+
     }
 
     private Optional<User> authenticationForOauth2ReturnUser(OAuth2User oauth2User){

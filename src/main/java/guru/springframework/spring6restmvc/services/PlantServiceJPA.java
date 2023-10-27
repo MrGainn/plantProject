@@ -24,11 +24,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlantServiceJPA implements PlantService {
     private final PlantRepository plantRepository;
+
+    private final static int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 20;
     private final PlantMapper plantMapper;
 
     private final UserMapper userMapper;
 
     private final UserService userService;
+
 
     @Override
     public List<PlantDto> listAllPlants() {
@@ -110,6 +114,7 @@ public class PlantServiceJPA implements PlantService {
 
     @Override
     public List<PlantDto> getPlantsByUserId(User user) {
+
         return plantRepository.findAllByUsers(user)
                 .stream()
                 .map(plant -> {
