@@ -35,6 +35,8 @@ public class User {
 
     private Boolean admin;
 
+    private String fullName;
+
     @CreationTimestamp
     private LocalDateTime createDate;
 

@@ -34,6 +34,8 @@ public class Plant {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID plantId;
 
+    private Integer age;
+
     @NotNull
     @NotBlank
     @Size(max = 255)

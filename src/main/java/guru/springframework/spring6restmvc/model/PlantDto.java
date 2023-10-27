@@ -21,6 +21,9 @@ public class PlantDto {
     private UUID plantId;
     private String plantName;
 
+    private Integer age;
+
+
     private Set<Measurement> measurements;
 
     private Set<User> users;
