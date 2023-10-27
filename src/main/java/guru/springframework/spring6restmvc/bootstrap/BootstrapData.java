@@ -43,14 +43,17 @@ public class BootstrapData implements CommandLineRunner {
         if (plantRepository.count() == 0){
             plant1 = Plant.builder()
                     .plantName("Catus")
+                    .age(10)
                     .build();
 
             plant2 = Plant.builder()
                     .plantName("Fiddle Leaf Fig")
+                    .age(13)
                     .build();
 
             plant3 = Plant.builder()
                     .plantName("Spider Plant ")
+                    .age(2)
                     .build();
 
             plantRepository.save(plant1);
@@ -64,6 +67,7 @@ public class BootstrapData implements CommandLineRunner {
             User user1 = User.builder()
                     .username("tico")
                     .email("tico@gmail.com")
+                    .fullName("Timon beld")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
                     .hashedpassword("123")
@@ -72,6 +76,7 @@ public class BootstrapData implements CommandLineRunner {
             User user2 = User.builder()
                     .email("kazi@gmail.com")
                     .username("Kazi")
+                    .fullName("Kazi Rifat Hasan")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
                     .hashedpassword("123")
@@ -80,6 +85,7 @@ public class BootstrapData implements CommandLineRunner {
             User user3 = User.builder()
                     .email("Nikita@gmail.com")
                     .username("nikita")
+                    .fullName("Elon musk")
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
                     .hashedpassword("123")
