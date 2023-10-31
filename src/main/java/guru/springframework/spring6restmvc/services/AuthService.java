@@ -27,17 +27,29 @@ public class AuthService implements UserDetailsService {
         String userName;
         String password;
         try {
-            userName = userRepository.findByUsername(username).getUsername();
-            password = userRepository.findByUsername(username).getHashedpassword();
+            guru.springframework.spring6restmvc.entities.User foundUser = userRepository.findByUsername(username);
+            if (foundUser != null) {
+                userName = foundUser.getUsername();
+                password = foundUser.getHashedpassword();
+
+                BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+                if (!bCrypt.matches(password, foundUser.getHashedpassword())){
+                    throw new UsernameNotFoundException("password not found with username: " + username);
+                }
+
+            }
+            else {
+                throw new UsernameNotFoundException("User not found with username: " + username);
+            }
+
         }
         catch (InternalAuthenticationServiceException e){
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
 
-        if (userName == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
+
+
 
         UserDetails userDetails = User.withUsername(userName)
                 .password(passwordEncoder().encode(password))

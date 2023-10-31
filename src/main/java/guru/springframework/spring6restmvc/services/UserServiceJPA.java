@@ -5,6 +5,7 @@ import guru.springframework.spring6restmvc.model.UserDto;
 import guru.springframework.spring6restmvc.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -50,9 +51,13 @@ public class UserServiceJPA implements UserService {
     }
 
     @Override
-    public UserDto saveNewUser(UserDto User) {
+    public UserDto saveNewUser(UserDto user) {
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String encryptPassw = bcrypt.encode(user.getHashedpassword());
+        user.setHashedpassword(encryptPassw);
+
         return UserMapper.UserToUserDto(UserRepository
-                .save(UserMapper.UserDtoToUser(User)));
+                .save(UserMapper.UserDtoToUser(user)));
     }
 
     @Override
