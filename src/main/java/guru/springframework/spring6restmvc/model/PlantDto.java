@@ -9,6 +9,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class PlantDto {
 
     private Integer age;
 
+    public LocalDateTime lastWater;
 
     private Set<Measurement> measurements;
 

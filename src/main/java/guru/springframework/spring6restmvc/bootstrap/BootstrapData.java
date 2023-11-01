@@ -145,10 +145,11 @@ public class BootstrapData implements CommandLineRunner {
                     .user(user1)
                     .status(Status.READ)
                     .build();
+            notificationRepository.save(notification1);
+            notificationRepository.save(notification2);
+            notificationRepository.save(notification3);
         }
-        notificationRepository.save(notification1);
-        notificationRepository.save(notification2);
-        notificationRepository.save(notification3);
+
 
     }
 

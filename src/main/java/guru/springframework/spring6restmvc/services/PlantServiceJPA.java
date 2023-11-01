@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import com.nimbusds.jose.util.IntegerUtils;
 import guru.springframework.spring6restmvc.entities.Measurement;
 import guru.springframework.spring6restmvc.entities.Plant;
 import guru.springframework.spring6restmvc.entities.User;
@@ -103,6 +104,9 @@ public class PlantServiceJPA implements PlantService {
         plantRepository.findById(plantId).ifPresentOrElse(foundPlant -> {
             if (StringUtils.hasText(plant.getPlantName())){
                 foundPlant.setPlantName(plant.getPlantName());
+            }
+            if (Objects.nonNull(plant.getLastWater())) {
+                foundPlant.setLastWater(plant.getLastWater());
             }
             atomicReference.set(Optional.of(plantMapper
                     .plantToPlantDto(plantRepository.save(foundPlant))));

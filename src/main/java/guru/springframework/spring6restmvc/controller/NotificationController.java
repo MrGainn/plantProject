@@ -2,15 +2,15 @@ package guru.springframework.spring6restmvc.controller;
 
 import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.model.NotificationDTO;
+import guru.springframework.spring6restmvc.model.PlantDto;
 import guru.springframework.spring6restmvc.services.CheckAuth;
 import guru.springframework.spring6restmvc.services.NotificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +44,19 @@ public class NotificationController {
             return notificationService.listAllByUserId(user1);
         }
         return new ArrayList<>();
+    }
+
+    @PatchMapping("{notificationId}")
+    public ResponseEntity updateBeerPatchById(@PathVariable("notificationId") UUID notificationId, @RequestBody NotificationDTO notificationDTO){
+
+        Optional<NotificationDTO> optionalNotification =  notificationService.patchNotificationById(notificationId, notificationDTO);
+
+        if (optionalNotification.isEmpty()){
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+        else {
+
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
     }
 }

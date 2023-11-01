@@ -99,16 +99,15 @@ public class MeasurementServiceJPA implements MeasurementService {
     public MeasurementDto saveNewMeasurement(Plant plant, MeasurementDto measurement) {
 
         Measurement savedMeasurement = measurementRepository.save(measurementMapper.measurementDtoToMeasurement(measurement));
-        Plant savedPlant = plantRepository.save(plant);
 
-        savedMeasurement.setPlant(savedPlant);
+        savedMeasurement.setPlant(plant);
 
-        Set<Measurement> measurements = savedPlant.getMeasurements();
+        Set<Measurement> measurements = plant.getMeasurements();
         measurements.add(savedMeasurement);
-        savedPlant.setMeasurements(measurements);
+        plant.setMeasurements(measurements);
 
         measurementRepository.save(savedMeasurement);
-        plantRepository.save(savedPlant);
+        plantRepository.save(plant);
 
         return measurementMapper.measurementToMeasurementDto(savedMeasurement);
     }

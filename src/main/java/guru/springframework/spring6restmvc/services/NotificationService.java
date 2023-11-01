@@ -5,12 +5,13 @@ import guru.springframework.spring6restmvc.model.NotificationDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface NotificationService {
 
     List<NotificationDTO> listAllByUserId(User user);
 
-    Optional<NotificationDTO> patchNotificationByUserId(User user, NotificationDTO notificationDTO);
+    Optional<NotificationDTO> patchNotificationById(UUID notificationId, NotificationDTO notificationDTO);
 
 
 }
