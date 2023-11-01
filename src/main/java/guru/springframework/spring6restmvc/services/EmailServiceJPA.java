@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class EmailServiceImpl implements EmailService {
+public class EmailServiceJPA implements EmailService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
@@ -31,12 +31,14 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(body);
 
-            if (!((file[0]).getOriginalFilename().equals(""))) {
+            if (file != null) {
+                if (!((file[0]).getOriginalFilename().equals(""))) {
 
-                for (int i = 0; i < file.length; i++) {
-                    mimeMessageHelper.addAttachment(
-                            file[i].getOriginalFilename(),
-                            new ByteArrayResource(file[i].getBytes()));
+                    for (int i = 0; i < file.length; i++) {
+                        mimeMessageHelper.addAttachment(
+                                file[i].getOriginalFilename(),
+                                new ByteArrayResource(file[i].getBytes()));
+                    }
                 }
             }
 

@@ -1,10 +1,9 @@
 package guru.springframework.spring6restmvc.bootstrap;
 
 
-import guru.springframework.spring6restmvc.entities.Measurement;
-import guru.springframework.spring6restmvc.entities.Plant;
-import guru.springframework.spring6restmvc.entities.User;
+import guru.springframework.spring6restmvc.entities.*;
 import guru.springframework.spring6restmvc.repositories.MeasurementRepository;
+import guru.springframework.spring6restmvc.repositories.NotificationRepository;
 import guru.springframework.spring6restmvc.repositories.PlantRepository;
 import guru.springframework.spring6restmvc.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +24,22 @@ import java.util.UUID;
 public class BootstrapData implements CommandLineRunner {
     private final PlantRepository plantRepository;
     private final UserRepository userRepository;
-
+    private final NotificationRepository notificationRepository;
     private final MeasurementRepository measurementRepository;
 
     Plant plant1;
     Plant plant2;
     Plant plant3;
+
+    Notification notification1;
+    Notification notification2;
+    Notification notification3;
+
+    User user1;
+    User user2;
+    User user3;
+    User user4;
+
     BCryptPasswordEncoder bCrypt;
 
     @Override
@@ -40,7 +49,10 @@ public class BootstrapData implements CommandLineRunner {
         loadPlantData();
         loadUserData();
         loadMeasurement();
+        loadNotifications();
     }
+
+
 
     private void loadPlantData() {
 
@@ -68,7 +80,7 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadUserData() {
         if (userRepository.count() == 0) {
-            User user1 = User.builder()
+             user1 = User.builder()
                     .username("tico")
                     .email("tico@gmail.com")
                     .fullName("Timon beld")
@@ -77,7 +89,7 @@ public class BootstrapData implements CommandLineRunner {
                     .hashedpassword(bCrypt.encode("123"))
                     .plants(new HashSet<>(Arrays.asList(plant1, plant2, plant3)))
                     .build();
-            User user2 = User.builder()
+             user2 = User.builder()
                     .email("kazi@gmail.com")
                     .username("Kazi")
                     .fullName("Kazi Rifat Hasan")
@@ -86,23 +98,23 @@ public class BootstrapData implements CommandLineRunner {
                     .hashedpassword(bCrypt.encode("123"))
                     .plants(new HashSet<>(Arrays.asList(plant1)))
                     .build();
-            User user3 = User.builder()
+             user3 = User.builder()
                     .email("Nikita@gmail.com")
                     .username("nikita")
                     .fullName("Elon musk")
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("123")
+                    .hashedpassword(bCrypt.encode("123"))
                     .plants(new HashSet<>(Arrays.asList(plant2)))
                     .build();
 
-            User user4 = User.builder()
+             user4 = User.builder()
                     .email("Pieter@gmail.com")
                     .username("Pieter")
                     .admin(Boolean.TRUE)
                     .createDate(LocalDateTime.now())
                     .plants(new HashSet<>(Arrays.asList(plant3, plant2)))
-                    .hashedpassword("I smoke")
+                    .hashedpassword(bCrypt.encode("I smoke"))
                     .build();
 
             userRepository.save(user1);
@@ -110,6 +122,34 @@ public class BootstrapData implements CommandLineRunner {
             userRepository.save(user3);
             userRepository.save(user4);
         }
+    }
+
+    private void loadNotifications() {
+
+        if (notificationRepository.count() == 0){
+            notification1 = Notification.builder()
+                    .title("Plant needs Water!")
+                    .body("Your plant will need water. please give it.")
+                    .user(user1)
+                    .status(Status.OPEN)
+                    .build();
+            notification2 = Notification.builder()
+                    .title("Fill waterTank!")
+                    .body("The waterTank is empty, please fill it")
+                    .user(user1)
+                    .status(Status.OPEN)
+                    .build();
+            notification3 = Notification.builder()
+                    .title("Plant needs Water!")
+                    .body("Your plant will need water. please give it.")
+                    .user(user1)
+                    .status(Status.READ)
+                    .build();
+        }
+        notificationRepository.save(notification1);
+        notificationRepository.save(notification2);
+        notificationRepository.save(notification3);
+
     }
 
     private void loadMeasurement() {
