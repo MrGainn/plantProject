@@ -32,11 +32,6 @@ public class AuthService implements UserDetailsService {
                 userName = foundUser.getUsername();
                 password = foundUser.getHashedpassword();
 
-                BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-                if (!bCrypt.matches(password, foundUser.getHashedpassword())){
-                    throw new UsernameNotFoundException("password not found with username: " + username);
-                }
-
             }
             else {
                 throw new UsernameNotFoundException("User not found with username: " + username);
@@ -48,11 +43,8 @@ public class AuthService implements UserDetailsService {
         }
 
 
-
-
-
         UserDetails userDetails = User.withUsername(userName)
-                .password(passwordEncoder().encode(password))
+                .password(password)
                 .roles("USER")
                 .build();
 

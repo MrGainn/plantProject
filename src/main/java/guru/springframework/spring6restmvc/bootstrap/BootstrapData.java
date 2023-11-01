@@ -9,6 +9,7 @@ import guru.springframework.spring6restmvc.repositories.PlantRepository;
 import guru.springframework.spring6restmvc.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -30,9 +31,12 @@ public class BootstrapData implements CommandLineRunner {
     Plant plant1;
     Plant plant2;
     Plant plant3;
+    BCryptPasswordEncoder bCrypt;
 
     @Override
     public void run(String... args) throws Exception {
+        bCrypt = new BCryptPasswordEncoder();
+
         loadPlantData();
         loadUserData();
         loadMeasurement();
@@ -70,7 +74,7 @@ public class BootstrapData implements CommandLineRunner {
                     .fullName("Timon beld")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("123")
+                    .hashedpassword(bCrypt.encode("123"))
                     .plants(new HashSet<>(Arrays.asList(plant1, plant2, plant3)))
                     .build();
             User user2 = User.builder()
@@ -79,7 +83,7 @@ public class BootstrapData implements CommandLineRunner {
                     .fullName("Kazi Rifat Hasan")
                     .admin(Boolean.FALSE)
                     .createDate(LocalDateTime.now())
-                    .hashedpassword("123")
+                    .hashedpassword(bCrypt.encode("123"))
                     .plants(new HashSet<>(Arrays.asList(plant1)))
                     .build();
             User user3 = User.builder()
