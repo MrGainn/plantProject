@@ -47,10 +47,13 @@ public class UploadMeasurementsController {
         }
         Plant plant = plantMapper.plantDtoToPlant(plantOptional.get());
 
-        MeasurementDto Measurement = measurementService.saveNewMeasurement(plant, measurement);
+        MeasurementDto savedMeasurement = measurementService.saveNewMeasurement(plant, measurement);
+        if (savedMeasurement != null){
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/measurement/" + measurement.getMeasurementId());
+        headers.add("Location", "/api/measurement/" + measurement.getMeasurementId());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }

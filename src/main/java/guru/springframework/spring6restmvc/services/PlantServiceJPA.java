@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.services;
 
-import com.nimbusds.jose.util.IntegerUtils;
 import guru.springframework.spring6restmvc.entities.Measurement;
 import guru.springframework.spring6restmvc.entities.Plant;
 import guru.springframework.spring6restmvc.entities.User;
@@ -52,6 +51,10 @@ public class PlantServiceJPA implements PlantService {
     public Optional<PlantDto> getPlantById(UUID id) {
         PlantDto plantDTO = plantMapper.plantToPlantDto(plantRepository.findById(id)
                 .orElse(null));
+        if (plantDTO == null){
+            return Optional.empty();
+        }
+
         plantDTO.setUsers(new HashSet<>());
         plantDTO.setMeasurements(new HashSet<>());
 

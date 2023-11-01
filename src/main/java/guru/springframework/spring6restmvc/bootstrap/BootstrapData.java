@@ -149,8 +149,6 @@ public class BootstrapData implements CommandLineRunner {
             notificationRepository.save(notification2);
             notificationRepository.save(notification3);
         }
-
-
     }
 
     private void loadMeasurement() {

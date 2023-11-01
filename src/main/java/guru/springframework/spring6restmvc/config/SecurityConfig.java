@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.config;
 
-
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -55,7 +54,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorize -> {
                     authorize
-                            .requestMatchers("/api/**").authenticated();
+                            .requestMatchers("/api/**").authenticated()
+                            .anyRequest().permitAll();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

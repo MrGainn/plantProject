@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -96,18 +95,13 @@ public class MeasurementServiceJPA implements MeasurementService {
     }
 
     @Override
-    public MeasurementDto saveNewMeasurement(Plant plant, MeasurementDto measurement) {
+    public MeasurementDto saveNewMeasurement(Plant plant, MeasurementDto measurementDto) {
 
-        Measurement savedMeasurement = measurementRepository.save(measurementMapper.measurementDtoToMeasurement(measurement));
+        Measurement measurement = measurementMapper.measurementDtoToMeasurement(measurementDto);
 
-        savedMeasurement.setPlant(plant);
+        measurement.setPlant(plant);
 
-        Set<Measurement> measurements = plant.getMeasurements();
-        measurements.add(savedMeasurement);
-        plant.setMeasurements(measurements);
-
-        measurementRepository.save(savedMeasurement);
-        plantRepository.save(plant);
+        Measurement savedMeasurement = measurementRepository.save(measurement);
 
         return measurementMapper.measurementToMeasurementDto(savedMeasurement);
     }
