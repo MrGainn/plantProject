@@ -39,6 +39,12 @@ public class Plant {
 
     private LocalDateTime lastWater;
 
+    private Integer threshold;
+
+    private String location;
+
+    private Boolean mode;
+
     @NotNull
     @NotBlank
     @Size(max = 255)

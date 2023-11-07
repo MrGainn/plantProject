@@ -60,15 +60,18 @@ public class BootstrapData implements CommandLineRunner {
             plant1 = Plant.builder()
                     .plantName("Catus")
                     .age(10)
+                    .mode(Boolean.FALSE)
                     .build();
 
             plant2 = Plant.builder()
                     .plantName("Fiddle Leaf Fig")
                     .age(13)
+                    .mode(Boolean.FALSE)
                     .build();
 
             plant3 = Plant.builder()
-                    .plantName("Spider Plant ")
+                    .plantName("Spider Plant")
+                    .mode(Boolean.FALSE)
                     .age(2)
                     .build();
 
@@ -129,13 +132,13 @@ public class BootstrapData implements CommandLineRunner {
         if (notificationRepository.count() == 0){
             notification1 = Notification.builder()
                     .title("Plant needs Water!")
-                    .body("Your plant will need water. please give it.")
+                    .body("Your plant needs water. Please give it some!")
                     .user(user1)
                     .status(Status.OPEN)
                     .build();
             notification2 = Notification.builder()
                     .title("Fill waterTank!")
-                    .body("The waterTank is empty, please fill it")
+                    .body("The water tank is empty.Please fill it.")
                     .user(user1)
                     .status(Status.OPEN)
                     .build();

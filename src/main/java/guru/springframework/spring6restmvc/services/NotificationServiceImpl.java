@@ -6,8 +6,10 @@ import guru.springframework.spring6restmvc.mappers.NotificationMapper;
 import guru.springframework.spring6restmvc.model.NotificationDTO;
 import guru.springframework.spring6restmvc.model.UserDto;
 import guru.springframework.spring6restmvc.repositories.NotificationRepository;
+import guru.springframework.spring6restmvc.repositories.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,7 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
     public List<NotificationDTO> listAllByUserId(User user) {
 
 
-        List<Notification> notifications = notificationRepository.findAllByUser(user);
+        List<Notification> notifications = notificationRepository.findAllByUserOrderByDateDesc(user);
 
         return notifications.stream()
                 .map(notification -> {
@@ -43,13 +45,23 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public NotificationDTO saveNewNotification(NotificationDTO notificationDTO) {
+        return notificationMapper.NotificationToNotificationDto(notificationRepository
+                .save(notificationMapper.NotificationDtoToNotification(notificationDTO)));
+    }
+
+
+    @Override
     public Optional<NotificationDTO> patchNotificationById(UUID notificationId, NotificationDTO notificationDTO) {
 
         AtomicReference<Optional<NotificationDTO>> atomicReference = new AtomicReference<>();
 
         notificationRepository.findById(notificationId).ifPresentOrElse(foundNotification -> {
-            if (StringUtils.hasText(String.valueOf(notificationDTO.getStatus()))){
+            if (!String.valueOf(notificationDTO.getStatus()).equals("null")){
                 foundNotification.setStatus(notificationDTO.getStatus());
+            }
+            if (StringUtils.hasText(notificationDTO.getBody())){
+                notificationDTO.setBody(notificationDTO.getBody());
             }
             atomicReference.set(Optional.of(notificationMapper
                     .NotificationToNotificationDto(notificationRepository.save(foundNotification))));

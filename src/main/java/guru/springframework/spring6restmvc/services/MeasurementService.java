@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.services;
 
 import guru.springframework.spring6restmvc.entities.Plant;
+import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.model.MeasurementDto;
 import org.springframework.data.domain.Page;
 

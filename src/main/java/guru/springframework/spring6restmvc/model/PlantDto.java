@@ -26,6 +26,12 @@ public class PlantDto {
 
     public LocalDateTime lastWater;
 
+    private Integer threshold;
+
+    private Boolean mode;
+
+    private String location;
+
     private Set<Measurement> measurements;
 
     private Set<User> users;

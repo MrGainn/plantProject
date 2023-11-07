@@ -1,9 +1,9 @@
 package guru.springframework.spring6restmvc.services;
 
-import guru.springframework.spring6restmvc.entities.Measurement;
-import guru.springframework.spring6restmvc.entities.Plant;
+import guru.springframework.spring6restmvc.entities.*;
 import guru.springframework.spring6restmvc.mappers.MeasurementMapper;
 import guru.springframework.spring6restmvc.model.MeasurementDto;
+import guru.springframework.spring6restmvc.model.NotificationDTO;
 import guru.springframework.spring6restmvc.repositories.MeasurementRepository;
 import guru.springframework.spring6restmvc.repositories.PlantRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -25,6 +23,8 @@ import java.util.stream.Collectors;
 public class MeasurementServiceJPA implements MeasurementService {
 
     private final MeasurementRepository measurementRepository;
+
+    private final NotificationService notificationService;
 
     private final static int DEFAULT_PAGE = 0;
     private static final int DEFAULT_PAGE_SIZE = 20;
@@ -103,6 +103,29 @@ public class MeasurementServiceJPA implements MeasurementService {
 
         Measurement savedMeasurement = measurementRepository.save(measurement);
 
+        if (plant.getMode().equals(Boolean.FALSE)){
+            if (savedMeasurement.getHumidity() <= 20) {
+                Optional<Plant> databasePlantOptional = plantRepository.findById(plant.getPlantId());
+                if (databasePlantOptional.isPresent()) {
+                    Plant databasePlant = databasePlantOptional.get();
+
+                    Set<User> usersForPlantSet = databasePlant.getUsers();
+
+                    ArrayList<User> usersForPlant = new ArrayList<>(usersForPlantSet);
+
+                    for (User user : usersForPlant) {
+                        NotificationDTO notificationdto = NotificationDTO.builder()
+                                .title("Plant needs Water!")
+                                .body("Your plant needs water. Please give it some!")
+                                .user(user)
+                                .status(Status.OPEN)
+                                .build();
+                        notificationService.saveNewNotification(notificationdto);
+                    }
+                }
+
+            }
+        }
         return measurementMapper.measurementToMeasurementDto(savedMeasurement);
     }
 

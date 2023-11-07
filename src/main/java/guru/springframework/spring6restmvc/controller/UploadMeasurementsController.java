@@ -48,7 +48,7 @@ public class UploadMeasurementsController {
         Plant plant = plantMapper.plantDtoToPlant(plantOptional.get());
 
         MeasurementDto savedMeasurement = measurementService.saveNewMeasurement(plant, measurement);
-        if (savedMeasurement != null){
+        if (savedMeasurement == null){
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
 

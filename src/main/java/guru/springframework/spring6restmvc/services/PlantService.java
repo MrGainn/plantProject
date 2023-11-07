@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.services;
 
 import guru.springframework.spring6restmvc.entities.Measurement;
+import guru.springframework.spring6restmvc.entities.Plant;
 import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.model.PlantDto;
 
@@ -26,4 +27,6 @@ public interface PlantService {
     Optional<Measurement> getPlantMeasurement(UUID measurementId);
 
     UUID getFirstInRepository();
+
+    List<User> getPlantUsers(Plant plant);
 }

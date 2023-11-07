@@ -49,17 +49,6 @@ public class UserController {
         return userService.listAllUsers();
     }
 
-    @PostMapping
-    public ResponseEntity handlePost(@RequestBody UserDto user){
-
-        UserDto savedUser = userService.saveNewUser(user);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/user/" + savedUser.getUserId().toString());
-
-        return new ResponseEntity(headers, HttpStatus.CREATED);
-    }
-
     @PatchMapping()
     public ResponseEntity patchUser(@RequestBody UserDto user){
 

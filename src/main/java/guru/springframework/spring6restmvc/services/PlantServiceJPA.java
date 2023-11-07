@@ -111,6 +111,15 @@ public class PlantServiceJPA implements PlantService {
             if (Objects.nonNull(plant.getLastWater())) {
                 foundPlant.setLastWater(plant.getLastWater());
             }
+            if (Objects.nonNull(plant.getMode())) {
+                foundPlant.setMode(plant.getMode());
+            }
+            if (Objects.nonNull(plant.getLocation())) {
+                foundPlant.setLocation(plant.getLocation());
+            }
+            if (Objects.nonNull(plant.getThreshold())) {
+                foundPlant.setThreshold(plant.getThreshold());
+            }
             atomicReference.set(Optional.of(plantMapper
                     .plantToPlantDto(plantRepository.save(foundPlant))));
         }, () -> {
@@ -145,5 +154,10 @@ public class PlantServiceJPA implements PlantService {
             return UUID.fromString("a7355e4c-0000-0000-0000-ec00b8309ae9");
         }
         return plant.get().getPlantId();
+    }
+
+    @Override
+    public List<User> getPlantUsers(Plant plant) {
+        return null;
     }
 }
